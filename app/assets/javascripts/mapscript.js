@@ -1,13 +1,15 @@
 var map;		//The Map
 var rect;		//The Rectangle
-var myLat = 34.1424968;
-var myLng = -118.1441045;
+var myLat = 34.142750;
+var myLng = -118.141953;
 var tsLatLng = new google.maps.LatLng({lat: myLat, lng: myLng});  //Times Square LatLng
 var nLat, wLng; //Latitude and Longitude variables
 var ctrlDown = false;  //Ctrl key state
 var canDraw = false;   //Can we draw the rectangle? Set true if mouse button pressed.
+
 function initialize() {
-  var mapOptions = {  
+
+  var mapOptions = {
 	zoom: 15,
 	draggableCursor: null,
 	center: tsLatLng
@@ -29,7 +31,7 @@ function initialize() {
   });
   map.addListener('mousedown', function(e){   //Event listener for the map's mouse down event
 	if (ctrlDown){							  //We run the code if the Ctrl key is down
-		canDraw = true;						  //We started to draw	
+		canDraw = true;						  //We started to draw
 		nLat = e.latLng.lat();				  //Get the initial latitude from the MouseEvent and set it to nLat variable
 		wLng = e.latLng.lng();				  //Get the initial longitude from the MouseEvent and set it to wLng variable
 		rect.setBounds({north: nLat, south:nLat, east: wLng, west: wLng});  //Set the initial bounds. Now the SW anf NE coordinates are the same.
@@ -52,22 +54,22 @@ function initialize() {
 	map.setOptions({draggable : true});       //We have finished drawing so the map can be draggable again.
 	map.setOptions({draggableCursor : null}); //Set the cursor to 'default hand'
 	if (ctrlDown && canDraw){				  //If we have have finished drawing
-		canDraw = false;					  //Set the canDraw variable to false	
+		canDraw = false;					  //Set the canDraw variable to false
 		map.fitBounds(rect.getBounds());	  //Sets the maps's viewport to contain the given bounds (the rectangle's bounds).
 		setTimeout(function(){ 				  //Removethe rectangle from the map after 500 milliseconds
-		  rect.setMap(null); }, 500         
+		  rect.setMap(null); }, 500
 		);
 	}
   });
   google.maps.event.addDomListener(document, 'keydown', function (e) {  //DOM listener for keydown
     var code = (e.keyCode ? e.keyCode : e.which);
     if (code === 17) {													//If we push the Ctrl key
-		map.setOptions({draggableCursor : 'crosshair'});				//We set the cursor to + 
+		map.setOptions({draggableCursor : 'crosshair'});				//We set the cursor to +
 		ctrlDown = true;												//Set ctrlDown variable to true
     }
-  });  
+  });
   google.maps.event.addDomListener(document, 'keyup', function (e) {	//DOM listener for keyup
-    var code = (e.keyCode ? e.keyCode : e.which);	
+    var code = (e.keyCode ? e.keyCode : e.which);
     if (code === 17) {													//If we release the Ctrl key
 		ctrlDown = false;												//Set the ctrlDown and canDraw variables to false
 		canDraw = false;												//(We do not allow drawing)
@@ -75,7 +77,7 @@ function initialize() {
 		map.setOptions({draggable : true});								//Set the cursor and the draggable option to true again
 		map.setOptions({draggableCursor : null});
     }
-  });  
+  });
 };
 
 function addMarker(location) {
