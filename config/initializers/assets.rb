@@ -10,4 +10,4 @@ Rails.application.config.assets.version = '1.0'
 # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
 # Rails.application.config.assets.precompile += %w( search.js )
 
-Rails.application.config.assets.precompile += %w( mapscript.js bootstrap-multiselect.js jquery-3.1.1.min.js bootstrap-multiselect.css )
+Rails.application.config.assets.precompile += %w( bootstrap-multiselect.js jquery-3.1.1.min.js bootstrap-multiselect.css )
