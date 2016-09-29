@@ -2,12 +2,17 @@
 <div>
 <form class="navbar-form navbar-left" role="search">
   <div class="form-group">
-    <input type="text" class="form-control" placeholder="Ethnicity">
+    <select id="radius" class="form-control">
+      <option value=1>Within 1 Mile</option>
+      <option value=3>Within 3 Miles</option>
+      <option value=5 selected>Within 5 Miles</option>
+      <option value=10>Within 10 Miles</option>
+    </select>
     <input type="text" class="form-control" placeholder="Ethnicity">
     <input type="text" class="form-control" placeholder="Religion">
     <input type="text" class="form-control" placeholder="Gender">
     <input type="text" class="form-control" placeholder="Zip Code">
-    <button type="submit" class="btn btn-default" onclick="">Search</button>
+    <input type="button" class="btn btn-default" onclick="update()" value="Update">
   </div>
 </form>
 </div>
@@ -15,6 +20,39 @@
 
 <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
 <script>
+
+  function update() {
+
+    $.get("/backroom/search",
+      {
+        radius: $("#radius").val()
+      },
+      function(data, status){
+        //alert(data);
+        var result = JSON.parse(data);
+        var rad = result['radius'];
+        //alert(rad)
+        window.mymap.removeLayer(window.perimeter);
+        drawPerimeter(rad);
+        //window.mymap.setZoom(radZoomLookup(rad));
+        window.mymap.setView(new L.LatLng(myLat, myLng), radZoomLookup(rad));
+      }
+    );
+
+  }
+
+  function drawPerimeter(r) {
+    window.perimeter = L.circle([myLat, myLng], milesToMeters(r), {
+      color: '#aa0000',
+      fillColor: '#f03',
+      fillOpacity: 0.1
+    })
+    window.perimeter.addTo(mymap);
+  }
+
+  function setZoomFactor(z) {
+    window.mymap.setView([myLat, myLng], z);
+  }
 
   function milesToMeters(miles) {
     return miles * 1609.34;
@@ -41,12 +79,12 @@
     return z;
   }
 
-  var radius = <%= @radius %>;
-  var zoom = radZoomLookup[radius];
+  window.radius = $("#radius").val();
+  window.zoom = radZoomLookup[radius];
 
-  var myLat = 34.142750;
-  var myLng = -118.141953;
-  var mymap = L.map('mapid').setView([myLat, myLng], zoom);
+  window.myLat = 34.142750;
+  window.myLng = -118.141953;
+  window.mymap = L.map('mapid').setView([myLat, myLng], zoom);
   // public example: pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoid2Vic2hhbyIsImEiOiJjaXRubnR3OXUwNTlkMm5uMGFsb2p2eTYwIn0.obrOXE4ca0517hY61rJA7Q', {
     maxZoom: 18,
@@ -54,17 +92,18 @@
       '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
       'Imagery © <a href="http://mapbox.com">Mapbox</a>',
     id: 'mapbox.streets'
-  }).addTo(mymap);
+  }).addTo(window.mymap);
 
 
-  L.marker([myLat, myLng]).addTo(mymap)
+  L.marker([window.myLat, window.myLng]).addTo(window.mymap)
     .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
 
-  L.circle([myLat, myLng], milesToMeters(radius), {
+  window.perimeter = L.circle([myLat, myLng], milesToMeters(radius), {
     color: '#aa0000',
     fillColor: '#f03',
     fillOpacity: 0.1
-  }).addTo(mymap).bindPopup("I am a circle.");
+  })
+  window.perimeter.addTo(mymap).bindPopup("I am a circle.");
 
 /*
   L.polygon([
