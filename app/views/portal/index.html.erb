@@ -1,17 +1,65 @@
+<!--
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/themes/color.css">
+<link rel="stylesheet" type="text/css" href="http://www.jeasyui.com/easyui/demo/demo.css">
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.min.js"></script>
+<script type="text/javascript" src="http://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+-->
 
 <div>
 <form class="navbar-form navbar-left" role="search">
   <div class="form-group">
-    <select id="radius" class="form-control" onchange="respond()">
+    <!--
+    <input id='radius' class='easyui-combobox' data-options="
+    url: '/portal/radius',
+    method: 'get',
+    multiple: false,
+    valueField:'id',
+    textField:'text',
+    onSelect: respond
+    ">
+    -->
+    <select id="radius" class="form-control">
       <option value=1>Within 1 Mile</option>
       <option value=3>Within 3 Miles</option>
       <option value=5 selected>Within 5 Miles</option>
       <option value=10>Within 10 Miles</option>
     </select>
-    <input type="text" class="form-control" placeholder="Ethnicity">
-    <input type="text" class="form-control" placeholder="Religion">
-    <input type="text" class="form-control" placeholder="Gender">
-    <input type="text" class="form-control" placeholder="Zip Code">
+    <select id="gender" class="form-control">
+      <option value='m'>Male</option>
+      <option value='f' selected>Female</option>
+    </select>
+    <select id="occupation" class="form-control">
+      <% @occupation_options.each do |item| %>
+      	<option value="<%= item %>"><%= item %></option>
+      <% end %>
+    </select>
+    <select id="ethnicity" class="form-control">
+      <% @ethnicity_options.each do |item| %>
+        <option value="<%= item %>"><%= item %></option>
+      <% end %>
+    </select>
+    <select id="education" class="form-control">
+      <% @education_options.each do |item| %>
+        <option value="<%= item %>"><%= item %></option>
+      <% end %>
+    </select>
+    <select id="contribute" class="form-control">
+      <% @contribute_options.each do |item| %>
+        <option value="<%= item %>"><%= item %></option>
+      <% end %>
+    </select>
+    <select id="sports" class="form-control">
+      <% @sports_options.each do |item| %>
+        <option value="<%= item %>"><%= item %></option>
+      <% end %>
+    </select>
+    <select id="collector" class="form-control">
+      <% @collector_options.each do |item| %>
+        <option value="<%= item %>"><%= item %></option>
+      <% end %>
+    </select>
     <input type="button" class="btn btn-default" onclick="respond()" value="Update">
   </div>
 </form>
@@ -21,15 +69,55 @@
 <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
 <script>
 
+/*
+  $("#radius").combobox(
+    {
+      multiple: false,
+      valueField:'id',
+      textField:'text',
+      data: [
+        {"id": 1, "text": "Within 1 Mile"},
+        {"id": 3, "text": "Within 3 Miles"},
+        {"id": 5, "text": "Within 5 Miles"},
+        {"id": 10, "text": "Within 10 Miles"}
+      ],
+      onSelect: function(record) {
+        respond();
+      }
+    }
+  );
+  $("#contribute").combobox({multiple: true});
+  $("#sports").combobox({multiple: true});
+  $("#collector").combobox({multiple: true});
+  */
+
   function update() {
 
   }
 
   function respond() {
 
-    $.get("/backroom/search",
+      $.get("/backroom/search",
       {
         radius: $("#radius").val()
+
+        /*
+        gender: $("#gender").val(),
+        occupation: $("occupation").val(),
+        ethnicity: $("#ethnicity").val(),
+        education: $("#education").val(),
+        contribution: $("#contribution").val(),
+        sports: $("#sports").val(),
+        collector: $("#collector").val()
+        radius: $("#radius").combobox('getValue'),
+        gender: $("#gender").combobox('getValue'),
+        occupation: $("occupation").combobox('getValue'),
+        ethnicity: $("#ethnicity").combobox('getValue'),
+        education: $("#education").combobox('getValue'),
+        contribution: $("#contribution").combobox('getValues'),
+        sports: $("#sports").combobox('getValues'),
+        collector: $("#collector").combobox('getValues')
+        */
       },
       function(data, status) {
         //alert(data);
@@ -129,6 +217,7 @@
   window.mymap.doubleClickZoom.disable();
 
   // public example: pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw
+  // public
   L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoid2Vic2hhbyIsImEiOiJjaXRubnR3OXUwNTlkMm5uMGFsb2p2eTYwIn0.obrOXE4ca0517hY61rJA7Q', {
     maxZoom: 18,
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
