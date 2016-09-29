@@ -6,6 +6,34 @@ var tsLatLng = new google.maps.LatLng({lat: myLat, lng: myLng});  //Times Square
 var nLat, wLng; //Latitude and Longitude variables
 var ctrlDown = false;  //Ctrl key state
 var canDraw = false;   //Can we draw the rectangle? Set true if mouse button pressed.
+var beachFlag = null;
+
+function drawBeachFlag(theLat, theLng) {
+  var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+  beachFlag = new google.maps.Marker({
+    position: {lat: myLat, lng: myLng},
+    map: map,
+    icon: image
+  });
+}
+
+function recenter() {
+  beachFlag.setMap(null);
+  drawBeachFlag(theLat, theLng);
+  var hash = {};
+  hash['lat'] = theLat;
+  hash['lng'] = theLng + 0.05;
+  addMarker(hash);
+}
+
+function addMarker(hash) {
+  alert('added')
+  var marker = new google.maps.Marker({
+    position: {lat: hash['lat'], lng: hash['lng']},
+    map: map
+  });
+  markers.push(marker);
+}
 
 function initialize() {
 
@@ -15,12 +43,8 @@ function initialize() {
 	center: tsLatLng
   };
   map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions ); //Map constructor
-  var image = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-  var beachMarker = new google.maps.Marker({
-    position: {lat: myLat, lng: myLng},
-    map: map,
-    icon: image
-  });
+  drawBeachFlag(myLat, myLng);
+
   rect = new google.maps.Rectangle({											 //Rectangle constructor
 	  bounds:  {north:0, south:0, east:0, west:0},
 	  strokeColor: '#000000',
@@ -29,6 +53,16 @@ function initialize() {
 	  fillColor: '#000000',
 	  fillOpacity: 0.1
   });
+  map.addListener('click', function(e) {
+    if (ctrlDown) {
+      theLat = e.latLng.lat();
+      theLng = e.latlng.lng();
+      //alert(theLat + "," + theLng);
+      recenter(theLat, theLng);
+    }
+  });
+
+  /*
   map.addListener('mousedown', function(e){   //Event listener for the map's mouse down event
 	if (ctrlDown){							  //We run the code if the Ctrl key is down
 		canDraw = true;						  //We started to draw
@@ -51,15 +85,15 @@ function initialize() {
 	};
   });
   rect.addListener('mouseup', function(){	  //Event listener for the !rectangle's mouse move event (there is no mouseup for the map)
-	map.setOptions({draggable : true});       //We have finished drawing so the map can be draggable again.
-	map.setOptions({draggableCursor : null}); //Set the cursor to 'default hand'
-	if (ctrlDown && canDraw){				  //If we have have finished drawing
-		canDraw = false;					  //Set the canDraw variable to false
-		map.fitBounds(rect.getBounds());	  //Sets the maps's viewport to contain the given bounds (the rectangle's bounds).
-		setTimeout(function(){ 				  //Removethe rectangle from the map after 500 milliseconds
-		  rect.setMap(null); }, 500
-		);
-	}
+	  map.setOptions({draggable : true});       //We have finished drawing so the map can be draggable again.
+	  map.setOptions({draggableCursor : null}); //Set the cursor to 'default hand'
+	  if (ctrlDown && canDraw){				  //If we have have finished drawing
+		  canDraw = false;					  //Set the canDraw variable to false
+		  map.fitBounds(rect.getBounds());	  //Sets the maps's viewport to contain the given bounds (the rectangle's bounds).
+		  setTimeout(function(){ 				  //Removethe rectangle from the map after 500 milliseconds
+		    rect.setMap(null); }, 500
+		  );
+	  }
   });
   google.maps.event.addDomListener(document, 'keydown', function (e) {  //DOM listener for keydown
     var code = (e.keyCode ? e.keyCode : e.which);
@@ -78,8 +112,10 @@ function initialize() {
 		map.setOptions({draggableCursor : null});
     }
   });
+  */
 };
 
+/*
 function addMarker(location) {
 var marker = new google.maps.Marker({
   position: location,
@@ -87,6 +123,7 @@ var marker = new google.maps.Marker({
 });
 markers.push(marker);
 }
+*/
 
 // Sets the map on all markers in the array.
 function setMapOnAll(map) {

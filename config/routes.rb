@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  get 'portal/search'
-
+  get 'backroom/search'
   get 'portal/index'
 
   root 'portal#index'
