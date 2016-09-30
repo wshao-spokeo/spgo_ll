@@ -204,8 +204,8 @@ class PortalController < ApplicationController
   end
 
   def ddmaker(id, desc, ncol, items_var)
-    result = "    <select id=''#{id}' class='form-control'>\n"
-    result << "    <option value='' selected><b>#{desc}:</b></option>\n"
+    result = "    <select id=\"#{id}\" class='form-control'>\n"
+    result << "    <option value='nil' selected>#{desc}:</option>\n"
     eval("@items = @#{items_var}")
     if ncol == 1
       @items.each do |item|
