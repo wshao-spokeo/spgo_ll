@@ -10,7 +10,7 @@
 <div>
 <form class="navbar-form navbar-left" role="search">
   <div class="form-group">
-    <select id="radius" class="form-control btn btn-primary">
+    <select id="radius" class="form-control">
       <option value='1'>Within 1 Mile</option>
       <option value='3'>Within 3 Miles</option>
       <option value='5' selected>Within 5 Miles</option>
@@ -68,7 +68,8 @@
         //collector: $("#collector").val()
       },
       function(data, status) {
-        alert(data);
+        //alert(data);
+        //var manualData = '[{"last_name":"alleruzzo","first_name":"meredith","middle_initial":"m","full_address":"410 N Euclid Ave, Apt 11","city":"Pasadena","state":"CA","zip":"91101","dob":"19491129","phone":"6265777846","gender":"F","marital_status":"S","camping_or_hiking":"1","cur_home_value":"425","home_owner":"Y","education":"College Degree","ethnicity":"Caucasian","occupation":"Health Services","snow_skiing":"1","income":"$60k - $70k","fitness":"1","tennis":"1","language":"English","politics":"Democrat","religion":"Catholic","walking":"1","pin_lat":"34.153038","pin_lon":"-118.142548"},{"last_name":"leggitt","first_name":"mary","middle_initial":"t","full_address":"700 S Euclid Ave","city":"Pasadena","state":"CA","zip":"91106","dob":"19420918","gender":"F","marital_status":"M","cur_home_value":"705","home_owner":"Y","education":"Some College","ethnicity":"Caucasian","occupation":null,"income":"$100k - $150k","golf":"1","hunting":"1","language":"English","politics":"Republican","religion":"Protestant","pin_lat":"34.13363","pin_lon":"-118.142379"},{"last_name":"richardson","first_name":"greg","middle_initial":"d","full_address":"812 S Marengo Ave, Apt 4","city":"Pasadena","state":"CA","zip":"91106","dob":"19551222","gender":"M","marital_status":"M","cur_home_value":"625","home_owner":"Y","education":"College Degree","ethnicity":"Caucasian","income":"$100k - $150k","language":"English","politics":"Independent","religion":"Protestant","pin_lat":"34.131863","pin_lon":"-118.14538"},{"last_name":"faltisco","first_name":"robert","middle_initial":"m","full_address":"474 Miles St","city":"Pasadena","state":"CA","zip":"91106","dob":"19640628","gender":"M","marital_status":"S","cur_home_value":"875","home_owner":"Y","ethnicity":"Caucasian","income":"$150k - $175k","language":"English","religion":"Catholic","pin_lat":"34.133686","pin_lon":"-118.140426"},{"last_name":"shao","first_name":"peter","middle_initial":"v","full_address":"111 S De Lacey Ave, Unit 301","city":"Pasadena","state":"CA","zip":"91105","dob":"19460702","gender":"M","marital_status":"M","cur_home_value":"609","home_owner":"P","education":"Some College","ethnicity":"Asian","occupation":null,"income":"$70k - $80k","language":"English","politics":"Democrat","religion":"Buddhist","pin_lat":"34.14423","pin_lon":"-118.15275"}]';
 
         var results = JSON.parse(data);
         //window.radius = result['radius'];
