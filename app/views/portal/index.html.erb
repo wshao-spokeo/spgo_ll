@@ -10,56 +10,27 @@
 <div>
 <form class="navbar-form navbar-left" role="search">
   <div class="form-group">
+    <select id="radius" class="form-control btn btn-primary">
+      <option value='1'>Within 1 Mile</option>
+      <option value='3'>Within 3 Miles</option>
+      <option value='5' selected>Within 5 Miles</option>
+      <option value='10'>Within 10 Miles</option>
+    </select>
+    <%= raw ddmaker "gender", "Gender", 2, "gender_pairs" %>
+    <%= raw ddmaker "age", "Age", 2, "age_pairs" %>
+    <%= raw ddmaker "occupation", "Occupation", 2, "occupation_pairs" %>
+    <%= raw ddmaker "ethnicity", "Ethnicity", 1, "ethnicity_options" %>
+    <%= raw ddmaker "language", "Language", 2, "language_pairs" %>
+    <%= raw ddmaker "religion", "Religion", 2, "religion_pairs" %>
+    <%= raw ddmaker "politics", "Politics", 2, "politics_pairs" %>
+    <%= raw ddmaker "education", "Education", 2, "education_pairs" %>
+    <%= raw ddmaker "curr_home_value", "Current Home Value", 2, "home_value_pairs" %>
+    <%= raw ddmaker "sports", "Sports", 1, "sports_options" %>
     <!--
-    <input id='radius' class='easyui-combobox' data-options="
-    url: '/portal/radius',
-    method: 'get',
-    multiple: false,
-    valueField:'id',
-    textField:'text',
-    onSelect: respond
-    ">
+    <%= raw ddmaker "median_home_value", "Median Home Value", 2, "home_value_pairs" %>
+    <%= raw ddmaker "contribute", "Contribute To", 1, "contribute_options" %>
+    <%= raw ddmaker "collector", "Collector Of", 1, "collector_options" %>
     -->
-    <select id="radius" class="form-control">
-      <option value=1>Within 1 Mile</option>
-      <option value=3>Within 3 Miles</option>
-      <option value=5 selected>Within 5 Miles</option>
-      <option value=10>Within 10 Miles</option>
-    </select>
-    <select id="gender" class="form-control">
-      <option value='m'>Male</option>
-      <option value='f' selected>Female</option>
-    </select>
-    <select id="occupation" class="form-control">
-      <% @occupation_options.each do |item| %>
-      	<option value="<%= item %>"><%= item %></option>
-      <% end %>
-    </select>
-    <select id="ethnicity" class="form-control">
-      <% @ethnicity_options.each do |item| %>
-        <option value="<%= item %>"><%= item %></option>
-      <% end %>
-    </select>
-    <select id="education" class="form-control">
-      <% @education_options.each do |item| %>
-        <option value="<%= item %>"><%= item %></option>
-      <% end %>
-    </select>
-    <select id="contribute" class="form-control">
-      <% @contribute_options.each do |item| %>
-        <option value="<%= item %>"><%= item %></option>
-      <% end %>
-    </select>
-    <select id="sports" class="form-control">
-      <% @sports_options.each do |item| %>
-        <option value="<%= item %>"><%= item %></option>
-      <% end %>
-    </select>
-    <select id="collector" class="form-control">
-      <% @collector_options.each do |item| %>
-        <option value="<%= item %>"><%= item %></option>
-      <% end %>
-    </select>
     <input type="button" class="btn btn-default" onclick="respond()" value="Update">
   </div>
 </form>
@@ -69,69 +40,50 @@
 <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
 <script>
 
-/*
-  $("#radius").combobox(
-    {
-      multiple: false,
-      valueField:'id',
-      textField:'text',
-      data: [
-        {"id": 1, "text": "Within 1 Mile"},
-        {"id": 3, "text": "Within 3 Miles"},
-        {"id": 5, "text": "Within 5 Miles"},
-        {"id": 10, "text": "Within 10 Miles"}
-      ],
-      onSelect: function(record) {
-        respond();
-      }
-    }
-  );
-  $("#contribute").combobox({multiple: true});
-  $("#sports").combobox({multiple: true});
-  $("#collector").combobox({multiple: true});
-  */
-
   function update() {
-
   }
 
   function respond() {
 
-      $.get("/backroom/search",
-      {
-        radius: $("#radius").val()
+      //var addr = "/backroom/search";
+      var addr = "http://172.20.48.178/people/search_people";
 
-        /*
+      $.get(addr,
+      {
+        lat: window.myLat,
+        lon: window.myLng,
+        radius: $("#radius").val(),
         gender: $("#gender").val(),
         occupation: $("occupation").val(),
         ethnicity: $("#ethnicity").val(),
         education: $("#education").val(),
-        contribution: $("#contribution").val(),
-        sports: $("#sports").val(),
-        collector: $("#collector").val()
-        radius: $("#radius").combobox('getValue'),
-        gender: $("#gender").combobox('getValue'),
-        occupation: $("occupation").combobox('getValue'),
-        ethnicity: $("#ethnicity").combobox('getValue'),
-        education: $("#education").combobox('getValue'),
-        contribution: $("#contribution").combobox('getValues'),
-        sports: $("#sports").combobox('getValues'),
-        collector: $("#collector").combobox('getValues')
-        */
+        language: $("#language").val(),
+        religion: $("#religion").val(),
+        politics: $("#politics").val(),
+        age: $("#age").val(),
+        curr_home_value: $("#curr_home_value").val(),
+        //median_home_value: $("#median_home_value").val(),
+        sports: $("#sports").val()
+        //contribution: $("#contribution").val(),
+        //collector: $("#collector").val()
       },
       function(data, status) {
-        //alert(data);
-        var result = JSON.parse(data);
-        window.radius = result['radius'];
+        alert(data);
+
+        var results = JSON.parse(data);
+        //window.radius = result['radius'];
         //alert(rad)
         //window.mymap.removeLayer(window.perimeter);
+        window.radius = $("#radius").val();
         redrawPerimeter(window.radius);
         //window.mymap.setZoom(radZoomLookup(rad));
         window.mymap.setView(new L.LatLng(window.myLat, window.myLng), radZoomLookup[window.radius]);
 
-        var pins = result['pins'];
+        //var pins = result['pins'];
+        //var pin_lat = result['pin_lat'];
+        //var pin_lon = result['pin_lon'];
         clearMarkers();
-        setMarkers(pins);
+        setMarkers(results);
 
       }
     );
@@ -148,11 +100,10 @@
   function setMarkers(thePins) {
     for (var i = 0; i < thePins.length; i++) {
       var pin = thePins[i];
-      if (pin.samp == true) {
-        var marcker = L.marker([pin.lat, pin.lng]).addTo(window.mymap)
-          .bindPopup("<b>" + pin.name + "</b><br>" + pin.desc);
+      var name = pin.first_name + ' ' + pin.last_name;
+      var marcker = L.marker([pin.pin_lat, pin.pin_lon]).addTo(window.mymap)
+          .bindPopup("<b>" + name + "</b><br>");
         window.markers.push(marcker);
-      }
     }
   }
 
@@ -192,6 +143,11 @@
     10: 11
   };
 
+  var genderLookup = {
+    'M': 'Male',
+    'F': 'Female'
+  }
+
   function findZoom(r) {
     var z = 12;
     if (r == 1) {
@@ -205,7 +161,6 @@
     }
     return z;
   }
-
 
   window.markers = [];
   window.radius = $("#radius").val();
