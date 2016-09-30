@@ -40,14 +40,41 @@
 <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
 <script>
 
+  function cleanUnd(vari) {
+    if (vari == null) {
+      return '';
+    } else {
+      return vari;
+    }
+  }
+
   function update() {
   }
 
   function respond() {
 
       //var addr = "/backroom/search";
-      var addr = "http://172.20.48.178:3000/people/search_people";
+      var addr = "http://172.24.17.17:3000/people/search_people";
       //var addr = "http://localhost/people/search_people";
+
+/*
+      var param_train = "?lat=" + window.myLat
+        + "&lon=" + window.myLng
+        + "&radius=" + $("#radius").val()
+        + "&gender=" + document.getElementById("gender").value
+        + "&occupation=" + document.getElementById("occupation").value
+        + "&ethnicity=" + $("#ethnicity").val()
+        + "&education=" + $("#education").val()
+        + "&language=" + $("#language").val()
+        + "&religion=" + $("#religion").val()
+        + "&politics=" + $("#politics").val()
+        + "&age=" + $("#age").val()
+        + "&curr_home_value=" + $("#curr_home_value").val()
+        + "&sports=" + $("#sports").val();
+
+      var address = addr + param_train;
+      alert(address);
+*/
 
       $.get(addr,
       {

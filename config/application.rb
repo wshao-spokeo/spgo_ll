@@ -22,11 +22,12 @@ module SpgoLl
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
-    config.action_dispatch.default_headers = {
+    config.action_dispatch.default_headers.merge!({
     #'Access-Control-Allow-Origin' => 'http://172.20.48.178',
     'Access-Control-Allow-Origin' => '*',
-    'Access-Control-Request-Method' => %w{GET POST OPTIONS}.join(",")
-    }
+    'Access-Control-Request-Method' => '*'
+    #'Access-Control-Request-Method' => %w{GET POST OPTIONS}.join(",")
+    })
     #config/application.rb
     config.middleware.insert_before 0, "Rack::Cors" do
       allow do
